@@ -4,7 +4,6 @@
 #include<string>
 using namespace std;
 
-#define mottohayaku ios::sync_with_stdio(0),cin.tie(0),cout.tie(0)
 #define endl '\n'
 #define GrantAccess 0
 #define WrongUsername 2
@@ -29,6 +28,7 @@ int main(){
 
     }
     else if(choice == 2){
+    
         int state = Login();
 
         if(state == WrongUsername){
@@ -39,11 +39,12 @@ int main(){
                 Registration();
                 main();
             }
+            
             else if(option == 2){
                 Login();
-            }
-            else exit(1);
+            }else exit(1);
         }
+        
     }
 }
 
