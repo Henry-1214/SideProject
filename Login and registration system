@@ -1,6 +1,9 @@
 #include<iostream>
 #include<cstdlib>
 #include<fstream>
+#include<sstream>
+
+
 using namespace std;
 
 #define mottohayaku ios::sync_with_stdio(0),cin.tie(0),cout.tie(0)
@@ -18,6 +21,7 @@ void Registration();
 int main(){
     int choice;
     cout << "==(1).Login==" << endl << "==(2).Register==" << endl << "-->Choice:";cin >> choice;
+
     while(choice != 1 && choice != 2){
         cout << "Please enter RULED option." << endl;
         cout << "==(1).Login==" << endl << "==(2).Register==" << endl << "-->Choice:";cin >> choice;
@@ -29,7 +33,7 @@ int main(){
     else if(choice == 2){
         cout << "=====================" << endl << "Registration:" << endl <<"---------------------" << endl;
         Registration();
-int option;
+        int option;
         cout << "=====Registration Completed!!!=====" << endl << endl << "==(1).Login==" << endl << "==(2).Exit=="<<endl<<endl<< "-->Choice:";cin >> option;
 
         if(option == 1){
@@ -39,53 +43,40 @@ int option;
     }
 }
 
-int SignIn(){
+int SignIn() {
     cout << "=====================" << endl << "Login:" << endl << "---------------------" << endl;
+    
     in.open("C:\\Users\\user\\Desktop\\data.txt");
-    string username, password, un, pa;
-    in >> un >> pa;
+    string username, password, line;
 
-    cout << "-->Username:";cin >> username;
-    cout << endl << "-->Password:";cin >> password;
+    cout << "-->Username:"; cin >> username;
+    cout << "-->Password:"; cin >> password;
 
-    if(username == un && password == pa){
-        cout << "=====GrantAccess!!!====="<<endl;
-        return GrantAccess;
-    }
-    else if(username != un){
+    while (getline(in, line)) {
+            
+        stringstream ss(line);
+        string un, pa;
+    
+        getline(ss, un, ',');
+        getline(ss, pa);
 
-        cout << "=====User does NOT exist.=====" << endl << endl;
-        return WrongUsername;
-
-    }
-    else if(username == un && password != pa){
-
-        cout << "=====WrongPassword.=====" << endl << endl;
-        int chance = 2;
-        while(password != pa){
-            cout << "===Please try again.===" << endl << chance << " chance less" << endl << "-->Password:";cin >> password;
-            if(password == pa){
-                cout << "=====GrantAccess!!!====="<<endl;
-                return GrantAccess;
-            }
-            else{
-                chance--;
-                if(!chance){
-                    cout << "===Two attempts had been tried.===" << endl;
-                    break;
-                }
-            }
+        if (username == un && password == pa) {
+            cout << "=====GrantAccess!!!=====" << endl;
+            in.close();
+            return GrantAccess;
         }
-        return WrongPassword;
     }
+
+    cout << "=====User does NOT exist or WrongPassword.=====" << endl << endl;
     in.close();
+    return WrongUsername;
 }
 
-void Registration(){
-    out.open("C:\\Users\\user\\Desktop\\data.txt");
+void Registration() {
+    out.open("C:\\Users\\user\\Desktop\\data.txt", ios::app);
     string un, pa;
-    cout << "-->Username:";cin >> un;
-    cout << endl << "-->Password:";cin >> pa;
-    out << un << endl << pa;
+    cout << "-->Username:"; cin >> un;
+    cout << "-->Password:"; cin >> pa;
+    out << un << "," << pa << endl;
     out.close();
 }
