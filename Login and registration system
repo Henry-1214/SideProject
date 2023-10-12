@@ -1,104 +1,91 @@
 #include<iostream>
 #include<cstdlib>
 #include<fstream>
-#include<string>
 using namespace std;
 
+#define mottohayaku ios::sync_with_stdio(0),cin.tie(0),cout.tie(0)
 #define endl '\n'
 #define GrantAccess 0
 #define WrongUsername 2
 #define WrongPassword 3
 
+ifstream in;
+ofstream out;
 
-int Login();
+int SignIn();
 void Registration();
 
 int main(){
     int choice;
-    cout<<"===(1).Register==="<<endl<<"===(2).Login==="<<endl<<"- - - - - - - - - "<<endl<<"-->Selection:";cin>>choice;
+    cout << "==(1).Login==" << endl << "==(2).Register==" << endl << "-->Choice:";cin >> choice;
     while(choice != 1 && choice != 2){
-        cout<<"===Please select RULED option.==="<<endl<<endl;
-        cout<<"===(1).Register==="<<endl<<"===(2).Login==="<<endl<<"- - - - - - - - - "<<endl<<"-->Selection:";cin>>choice;
+        cout << "Please enter RULED option." << endl;
+        cout << "==(1).Login==" << endl << "==(2).Register==" << endl << "-->Choice:";cin >> choice;
     }
     if(choice == 1){
-
-        Registration();
-
-        main();
+        SignIn();
 
     }
     else if(choice == 2){
-    
-        int state = Login();
+        cout << "=====================" << endl << "Registration:" << endl <<"---------------------" << endl;
+        Registration();
+int option;
+        cout << "=====Registration Completed!!!=====" << endl << endl << "==(1).Login==" << endl << "==(2).Exit=="<<endl<<endl<< "-->Choice:";cin >> option;
 
-        if(state == WrongUsername){
-            int option;
-            cout<<"===User does NOT exist!!!==="<<endl<<endl;
-            cout<<"===(1).Register=="<<endl<<"===(2).Login==="<<"===(3).Exit==="<<endl<<"-->Selection:";cin>>option;
-            if(option == 1){
-                Registration();
-                main();
-            }
-            
-            else if(option == 2){
-                Login();
-            }else exit(1);
-        }
-        
+        if(option == 1){
+            SignIn();
+        }else exit(1);
+
     }
+}
+
+int SignIn(){
+    cout << "=====================" << endl << "Login:" << endl << "---------------------" << endl;
+    in.open("C:\\Users\\user\\Desktop\\data.txt");
+    string username, password, un, pa;
+    in >> un >> pa;
+
+    cout << "-->Username:";cin >> username;
+    cout << endl << "-->Password:";cin >> password;
+
+    if(username == un && password == pa){
+        cout << "=====GrantAccess!!!====="<<endl;
+        return GrantAccess;
+    }
+    else if(username != un){
+
+        cout << "=====User does NOT exist.=====" << endl << endl;
+        return WrongUsername;
+
+    }
+    else if(username == un && password != pa){
+
+        cout << "=====WrongPassword.=====" << endl << endl;
+        int chance = 2;
+        while(password != pa){
+            cout << "===Please try again.===" << endl << chance << " chance less" << endl << "-->Password:";cin >> password;
+            if(password == pa){
+                cout << "=====GrantAccess!!!====="<<endl;
+                return GrantAccess;
+            }
+            else{
+                chance--;
+                if(!chance){
+                    cout << "===Two attempts had been tried.===" << endl;
+                    break;
+                }
+            }
+        }
+        return WrongPassword;
+    }
+    in.close();
 }
 
 void Registration(){
-    string username, password;
-    cout<<"===Select the username==="<<endl<<"-->Username:";cin>>username;
-    cout<<"===Enter the password==="<<endl<<"-->Password:";cin>>password;
-
-    ofstream out;
-    out.open("C:\\" + username + ".txt");
-
-    out<<username<<endl<<password;
+    out.open("C:\\Users\\user\\Desktop\\data.txt");
+    string un, pa;
+    cout << "-->Username:";cin >> un;
+    cout << endl << "-->Password:";cin >> pa;
+    out << un << endl << pa;
     out.close();
-    cout<<"===Registration Completed!!!==="<<endl;
-}
-
-int Login(){
-    string username, password, un, pw;
-    cout<<"-->Enter username:";cin>>username;
-    cout<<"-->Enter password:";cin>>password;
-
-    ifstream read("C:\\"+username+".txt");
-    getline(read, un);
-    getline(read, pw);
-
-    if(un == username && pw == password){
-        cout<<"===GrantAccess!!!==="<<endl;
-        return GrantAccess;
-    }
-    else if(un != username){
-        return WrongUsername;
-    }
-    else if(un == username && pw != password){
-        cout<<"===WrongPassword!!!==="<<endl<<endl;
-        int option;
-        cout<<"===(1).Try again==="<<endl<<"===(2).Exit==="<<endl<<"-->Selection:";cin>>option;
-        if(option == 1){
-            int chance = 2;
-            while(password != pw){
-                cout << "===Please try again.===" << endl << chance << " chance less" << endl << "-->Password:";cin >> password;
-                if(password == pw){
-                    cout << "===GrantAccess!!!==="<<endl;
-                    return GrantAccess;
-                }
-                else{
-                    chance--;
-                    if(!chance){
-                        cout << "===Two attempts had been tried.===" << endl;
-                    break;
-                    }
-                }
-            }
-        }
-        else exit(1);
-        return WrongPassword;
-    }
 }
